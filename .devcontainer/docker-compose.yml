@@ -1,0 +1,52 @@
+# Min version needed to allow setting network name (https://github.com/docker/compose/issues/3736)
+version: '3.5'
+services:
+  local-weather-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - local-weather-app-network
+    # Front-end development (Angular server)
+    #ports:
+    #  - "0.0.0.0:4200:4200"
+    # $(id -u):$(id -g)
+    user: "1000:1000"
+    # Option not available since Docker Compose 3 (https://github.com/docker/compose/issues/4700)
+    #group_add:
+      # cut -d: -f3 < <(getent group docker)
+    #  - 1001
+    volumes:
+      # Mounts the project folder to '/workspace'. While this file is in .devcontainer,
+      # mounts are relative to the first file in the list, which is a level up.
+      - ../:/workspace
+      # User NVM cache
+      - ${HOME}/.nvm/.cache:/opt/nvm/.cache
+      # User node cache
+      - ${HOME}/.npm/_cacache:/home/user/.npm/_cacache
+      # User ssh keys
+      - ${HOME}/.ssh:/home/user/.ssh
+      # User GIT config
+      - ${HOME}/.gitconfig:/home/user/.gitconfig
+      # Docker in Docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/home/user/.local/bin/docker
+      # VSCode server cache
+      - ${PWD}/.vscode-server/bin:/home/user/.vscode-server/bin
+      - ${PWD}/.vscode-server/extensions:/home/user/.vscode-server/extensions
+      # X11 Unix-domain socket
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - TZ=Europe/Madrid
+      # X11 Unix-domain socket
+      - DISPLAY=unix${DISPLAY}
+    # Allow shared memory to avoid RAM access failures and rendering glitches due to X extesnion MIT-SHM
+    ipc: host
+    cap_add:
+      # The kernel requires SYS_ADMIN for Chrome sand-box
+      - SYS_ADMIN
+
+networks:
+  local-weather-app-network:
+    # Create or join a network with given name
+    name: local-weather-app-network

@@ -1,0 +1,83 @@
+{
+  "name": "local-weather-app",
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
+  "service": "local-weather-app",
+  "workspaceFolder": "/workspace",
+  "runServices": [
+    "local-weather-app"
+  ],
+  "shutdownAction": "stopCompose",
+  "postCreateCommand": [
+    "/bin/bash",
+    "-l",
+    "-c",
+    "export NODE_VERSION=lts/erbium; nvm install ${NODE_VERSION};"
+  ],
+  "extensions": [
+    // Docker support
+    "ms-azuretools.vscode-docker",
+    // GIT support
+    "mhutchie.git-graph",
+    "eamodio.gitlens",
+    // History support
+    "xyz.local-history",
+    // Angular language service
+    "Angular.ng-template",
+    // TSLint
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    // Chrome debugger
+    "msjsdiag.debugger-for-chrome"
+  ],
+  "settings": {
+    "remote.extensionKind": {
+      // Force chrome debugger extension installation on container
+      "msjsdiag.debugger-for-chrome": [
+        "workspace"
+      ]
+    },
+    // Run interactive bash shell in VSCode integrated terminal
+    "terminal.integrated.shellArgs.linux": [
+      "-l"
+    ],
+    // Configure glob patterns for excluding files and folders.
+    "files.exclude": {
+      "**/.classpath": true,
+      "**/.project": true,
+      "**/.settings": true,
+      "**/.factorypath": true,
+      "**/.git": true,
+      "**/.gradle": true,
+      "**/.idea": true,
+      "**/.mvn": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/.DS_Store": true
+    },
+    // Configure glob patterns for excluding files and folders in searches. Inherits all glob patterns from the files.exclude setting.
+    "search.exclude": {
+      "**/node": true,
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/build": true,
+      "**/target": true,
+      "**/.vscode-server": true,
+      "**/.history": true
+    },
+    // Show control characters
+    "editor.renderControlCharacters": true,
+    // Do not use current file indentation
+    "editor.detectIndentation": false,
+    // Use 2 characters for tabs
+    "editor.tabSize": 2,
+    // Format code on paste
+    "editor.formatOnPaste": true,
+    // Format code on file save
+    "editor.formatOnSave": true,
+    // Format code while typing
+    "editor.formatOnType": true,
+    // Disable preview editor
+    "workbench.editor.enablePreview": false
+  }
+}
